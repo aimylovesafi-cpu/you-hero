@@ -1,13 +1,31 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>you-hero</title>
-<link rel="icon" type="image/png" href="./logo.png"><link rel="apple-touch-icon" href="./logo.png"><link rel="manifest" href="./manifest.json"><meta name="theme-color" content="#FF1493">
-<script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#050507] text-white min-h-screen flex items-center justify-center p-6">
-<div class="max-w-lg w-full text-center">
-<div class="text-6xl mb-4">🏭</div>
-<h1 class="text-3xl font-black bg-gradient-to-r from-[#FF1493] to-[#9D00FF] bg-clip-text text-transparent">V21 MASTER BUILDER</h1>
-<p class="text-white/50 mt-2 text-sm">index.html not found, but your files are ready!</p>
-<div class="mt-6 bg-white/5 border border-white/10 rounded-2xl p-4 text-left"><p class="text-xs text-white/40 mb-3">📁 YOUR FILES:</p><div class="grid gap-2"><a href="./index" class="file-link"><span class="icon">📄</span> index</a><a href="./game.js" class="file-link"><span class="icon">📜</span> game.js</a></div></div>
-<p class="text- text-white/20 mt-6">Tip: Add index.html or public/index.html next time</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>YOU HERO - Three.js</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#;overflow:hidden;color:#fff;font-family:sans-serif}
+#ui{position:fixed;top:0;left:0;width:100%;padding:12px;display:flex;justify-content:space-between;z-index:10;font-weight:900}
+#joy{position:fixed;left:14px;bottom:14px;width:100px;height:100px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:50%;z-index:10}
+#stk{position:absolute;left:50%;top:50%;width:36px;height:36px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+#fire{position:fixed;right:14px;bottom:14px;width:82px;height:82px;background:linear-gradient(135deg,#,#);border-radius:50%;z-index:10;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 20px #}
+#start{position:fixed;inset:0;background:radial-gradient(#,#070712);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.btn{background:linear-gradient(90deg,#,#);padding:13px 32px;border-radius:28px;border:none;font-weight:900;color:#000;margin-top:12px}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+<div id="ui"><div>SCORE <span id="sc">0</span></div><div>YOU HERO - THREE.JS</div></div>
+<div id="joy"><div id="stk"></div></div>
+<div id="fire">FIRE</div>
+<div id="start">
+ <h1>GRAFFITI HERO</h1>
+ <p>خودت با تفنگ فضایی!</p>
+ <img id="preview" style="width:120px;border-radius:12px;margin:12px">
+ <button class="btn" id="play">PLAY AS YOU</button>
 </div>
-<style>.file-link{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,0.05);border-radius:10px;text-decoration:none;color:#fff;font-size:13px}.file-link:hover{background:rgba(255,20,147,0.2)}.icon{font-size:14px}</style>
-</body></html>
+<script type="module" src="game.js"></script>
+</body>
+</html>
