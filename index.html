@@ -3,29 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>YOU HERO - Three.js</title>
+<title>YOU HERO</title>
+<script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
-body{background:#0a0a1a;overflow:hidden;color:#fff;font-family:sans-serif}
-#ui{position:fixed;top:0;left:0;width:100%;padding:12px;display:flex;justify-content:space-between;z-index:10;font-weight:900}
-#joy{position:fixed;left:14px;bottom:14px;width:100px;height:100px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:50%;z-index:10}
-#stk{position:absolute;left:50%;top:50%;width:36px;height:36px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
-#fire{position:fixed;right:14px;bottom:14px;width:82px;height:82px;background:linear-gradient(135deg,#ff3bfb,#00e5ff);border-radius:50%;z-index:10;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 20px #ff3bfb}
-#start{position:fixed;inset:0;background:radial-gradient(#2a1a4a,#070712);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:13px 32px;border-radius:28px;border:none;font-weight:900;color:#000;margin-top:12px}
+body{background:#0a0a1a;overflow:hidden;color:#fff;font-family:-apple-system,sans-serif}
+#ui{position:fixed;top:0;left:0;width:100%;padding:14px;display:flex;justify-content:space-between;z-index:20;font-weight:900}
+#joy{position:fixed;left:16px;bottom:20px;width:110px;height:110px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);border-radius:50%;z-index:20}
+#stk{position:absolute;left:50%;top:50%;width:42px;height:42px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+#fire{position:fixed;right:16px;bottom:20px;width:86px;height:86px;background:linear-gradient(135deg,#ff3bfb,#00e5ff);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 25px #ff3bfb}
+#start{position:fixed;inset:0;background:radial-gradient(circle at center,#2a1a4a,#070712);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:16px 38px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:16px;margin-top:18px}
 </style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="ui"><div>SCORE <span id="sc">0</span></div><div>YOU HERO - THREE.JS</div></div>
+<div id="ui"><div>SCORE <span id="sc">0</span></div><div>YOU HERO</div></div>
 <div id="joy"><div id="stk"></div></div>
 <div id="fire">FIRE</div>
 <div id="start">
-  <h1>GRAFFITI HERO</h1>
-  <p>خودت با تفنگ فضایی!</p>
-  <img id="preview" style="width:120px;border-radius:12px;margin:12px">
+  <h1 style="font-size:36px">GRAFFITI HERO</h1>
+  <p style="margin:8px 0;opacity:.8">خودت با تفنگ فضایی!</p>
+  <div id="ph" style="width:120px;height:180px;background:rgba(255,255,255,.1);border-radius:12px;margin:12px;display:flex;align-items:center;justify-content:center">LOADING...</div>
   <button class="btn" id="play">PLAY AS YOU</button>
+  <p style="font-size:12px;margin-top:10px;opacity:.5">اگر کار نکرد صفحه را رفرش کن</p>
 </div>
-<script type="module" src="game.js"></script>
+<script type="module" src="./game.js"></script>
 </body>
 </html>
