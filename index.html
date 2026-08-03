@@ -63,9 +63,21 @@ function init(){
  player=new THREE.Group();
  let tex=loader.load(HERO_URL);
  let mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, side:2, alphaTest:0.1});
+ 
+ 
  mat.onBeforeCompile = s => {
- s.fragmentShader = s.fragmentShader.replace("#include <map_fragment>", "#include <map_fragment>\n if(diffuseColor.r>0.92 && diffuseColor.g>0.92 && diffuseColor.b>0.92) discard;\n");
- };
+  s.fragmentShader = s.fragmentShader.replace("#include <map_fragment>",
+  `#include <map_fragment>
+   float gray = dot(diffuseColor.rgb, vec3(0.333));
+   if(gray > 0.85 && diffuseColor.a > 0.5) {
+     float checker = mod(floor(vMapUv.x*20.0) + floor(vMapUv.y*20.0), 2.0);
+     if(checker < 0.5) discard;
+   }
+   if(diffuseColor.r>0.9 && diffuseColor.g>0.9 && diffuseColor.b>0.9) discard;
+  `);
+};
+ 
+ 
  let mesh=new THREE.Mesh(new THREE.PlaneGeometry(2.2,3.4), mat);
  mesh.position.y=1.2; player.add(mesh);
  player.position.set(0,0,5); scene.add(player);
