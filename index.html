@@ -12,9 +12,9 @@ body{background:#0a0a1a;overflow:hidden;color:#fff;font-family:-apple-system,san
 #ui{position:fixed;top:0;left:0;width:100%;padding:14px;display:flex;justify-content:space-between;z-index:20;font-weight:900}
 #joy{position:fixed;left:16px;bottom:20px;width:110px;height:110px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);border-radius:50%;z-index:20}
 #stk{position:absolute;left:50%;top:50%;width:42px;height:42px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
-#fire{position:fixed;right:16px;bottom:20px;width:86px;height:86px;background:linear-gradient(135deg,#ff3bfb,#00e5ff);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 25px #ff3bfb}
+#fire{position:fixed;right:16px;bottom:20px;width:86px;height:86px;background:linear-gradient(135deg,#ff3bfb,#00e5ff);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900}
 #start{position:fixed;inset:0;background:radial-gradient(circle at center,#2a1a4a,#070712);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:16px 38px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:16px;margin-top:18px}
+.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:16px 38px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:18px}
 </style>
 </head>
 <body>
@@ -22,12 +22,92 @@ body{background:#0a0a1a;overflow:hidden;color:#fff;font-family:-apple-system,san
 <div id="joy"><div id="stk"></div></div>
 <div id="fire">FIRE</div>
 <div id="start">
-  <h1 style="font-size:36px">GRAFFITI HERO</h1>
-  <p style="margin:8px 0;opacity:.8">خودت با تفنگ فضایی!</p>
-  <div id="ph" style="width:120px;height:180px;background:rgba(255,255,255,.1);border-radius:12px;margin:12px;display:flex;align-items:center;justify-content:center">LOADING...</div>
+  <h1 style="font-size:38px">GRAFFITI HERO</h1>
+  <p style="margin:10px 0">خودت با تفنگ فضایی!</p>
   <button class="btn" id="play">PLAY AS YOU</button>
-  <p style="font-size:12px;margin-top:10px;opacity:.5">اگر کار نکرد صفحه را رفرش کن</p>
 </div>
-<script type="module" src="./game.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+let scene,camera,renderer,player,enemies=[],bullets=[],score=0,keys={x:0,y:0},started=false;
+
+function init(){
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,100);
+  renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(innerWidth,innerHeight);
+  document.body.appendChild(renderer.domElement);
+  scene.add(new THREE.AmbientLight(0xffffff,1));
+  let dl=new THREE.DirectionalLight(0xffffff,.8); dl.position.set(5,10,5); scene.add(dl);
+  let ground=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({color:0x1a1a35}));
+  ground.rotation.x=-1.5708; scene.add(ground);
+
+  // کاراکتر تو - فعلا با رنگ گرافیتی
+  player=new THREE.Mesh(new THREE.BoxGeometry(0.9,1.7,0.9), new THREE.MeshStandardMaterial({color:0xff6bce}));
+  player.position.set(0,0.85,7); scene.add(player);
+
+  camera.position.set(0,4,9); camera.lookAt(player.position);
+  spawn(5);
+}
+function spawn(n){
+  for(let i=0;i<n;i++){
+    let m=new THREE.Mesh(new THREE.SphereGeometry(0.5,12,12),new THREE.MeshStandardMaterial({color:0x44ff88}));
+    m.position.set((Math.random()-0.5)*20,0.5,(Math.random()-0.5)*20);
+    m.userData={s:0.05+Math.random()*0.05}; enemies.push(m); scene.add(m);
+  }
+}
+function shoot(){
+  let b=new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshStandardMaterial({color:0xff00ff,emissive:0xff00ff,emissiveIntensity:3}));
+  b.position.copy(player.position); b.position.y=0.9;
+  b.userData={v:new THREE.Vector3(0,0,-0.6)}; bullets.push(b); scene.add(b);
+}
+function update(){
+  if(!started) return;
+  player.position.x+=keys.x*0.2; player.position.z+=keys.y*0.2;
+  camera.position.x+=(player.position.x-camera.position.x)*0.07;
+  camera.position.z+=(player.position.z+6-camera.position.z)*0.07;
+  camera.lookAt(player.position.x,1,player.position.z-2);
+  for(let i=bullets.length-1;i>=0;i--){
+    let b=bullets[i]; b.position.add(b.userData.v);
+    if(b.position.length()>40){scene.remove(b); bullets.splice(i,1); continue;}
+    for(let j=enemies.length-1;j>=0;j--){
+      let e=enemies[j];
+      if(b.position.distanceTo(e.position)<1){
+        scene.remove(b); bullets.splice(i,1);
+        scene.remove(e); enemies.splice(j,1);
+        score++; sc.textContent=score;
+        if(enemies.length<2) spawn(4); break;
+      }
+    }
+  }
+  enemies.forEach(e=>{
+    let d=new THREE.Vector3().subVectors(player.position,e.position).normalize().multiplyScalar(e.userData.s);
+    e.position.add(d);
+  });
+}
+function loop(){requestAnimationFrame(loop); update(); if(renderer) renderer.render(scene,camera);}
+
+const joy=document.getElementById('joy'),stk=document.getElementById('stk');
+let act=false;
+function hj(e){
+  let r=joy.getBoundingClientRect(); let t=e.touches?e.touches[0]:e;
+  let x=t.clientX-r.left-r.width/2, y=t.clientY-r.top-r.height/2;
+  let d=Math.sqrt(x*x+y*y),m=38; if(d>m){x=x/d*m; y=y/d*m;}
+  stk.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+  keys.x=x/m; keys.y=y/m;
+}
+joy.addEventListener('touchstart',e=>{act=true; hj(e);},{passive:false});
+joy.addEventListener('touchmove',e=>{if(act) hj(e);},{passive:false});
+joy.addEventListener('touchend',()=>{act=false; stk.style.transform='translate(-50%,-50%)'; keys.x=0; keys.y=0;});
+fire.addEventListener('touchstart',e=>{e.preventDefault(); shoot();},{passive:false});
+fire.addEventListener('click',shoot);
+
+function start(){
+  document.getElementById('start').style.display='none';
+  started=true; init(); loop();
+}
+play.addEventListener('click',start);
+play.addEventListener('touchstart',e=>{e.preventDefault(); start();},{passive:false});
+</script>
 </body>
 </html>
