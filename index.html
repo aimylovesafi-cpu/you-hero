@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>YOU HERO - FINAL</title>
+<title>YOU HERO - SPACE RAD</title>
 <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
 body{background:#0d0a1a;overflow:hidden;color:#fff;font-family:-apple-system,sans-serif}
 #ui{position:fixed;top:0;left:0;width:100%;padding:14px;display:flex;justify-content:space-between;z-index:20;font-weight:900;text-shadow:0 0 10px #ff5bfb}
-#joy{position:fixed;left:16px;bottom:20px;width:115px;height:115px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:50%;z-index:20;backdrop-filter:blur(10px)}
-#stk{position:absolute;left:50%;top:50%;width:44px;height:44px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 15px #fff}
+#joy{position:fixed;left:16px;bottom:20px;width:115px;height:115px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:50%;z-index:20}
+#stk{position:absolute;left:50%;top:50%;width:44px;height:44px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
 #fire{position:fixed;right:16px;bottom:20px;width:90px;height:90px;background:linear-gradient(135deg,#ff3bfb,#00e5ff);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 30px #ff3bfb;font-size:18px}
 #start{position:fixed;inset:0;background:radial-gradient(circle at center,#2a1a5a,#070712);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 #start img{width:140px;border-radius:18px;margin:14px;box-shadow:0 0 30px #ff5bfb;border:2px solid #ff5bfb}
-.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:16px 40px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:18px;box-shadow:0 0 20px #ff5bfb}
+.btn{background:linear-gradient(90deg,#ff5bfb,#00ffff);padding:16px 40px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:18px}
 </style>
 </head>
 <body>
@@ -23,60 +23,45 @@ body{background:#0d0a1a;overflow:hidden;color:#fff;font-family:-apple-system,san
 <div id="joy"><div id="stk"></div></div>
 <div id="fire">FIRE</div>
 <div id="start">
-  <h1 style="font-size:40px;letter-spacing:2px">GRAFFITI HERO</h1>
-  <p style="opacity:.9">نسخه نهایی - خودت وسط بازی!</p>
-  <img src="data:image/webp;base64,UklGRmIIAABXRUJQVlA4IFYIAADwJgCdASpgAJAAPwVyq1Arp6Oisdos+XAgiWwAy2BMkXHiRFwP7O3pc/zG7+53D0if67fqN5/n2XR+Fdcb2ZezP94zHsAHWZ6sSwjvd/bEmxgPl9LRE3ALpKdvEPsqPeQ9gnXffK1qhfOT/V+NcFwPVMffb2Prf0qkHPkNdlWuQ24spiCjOAthv5tVz14J0Yjdf+O7K0JlXwwAgIsUDPcavgAmgn90Hea1jOVs6fSWrFMb14KK/jRxnnqUjps4gf8y/+sdUKBvlizXYUwxKgD/RnZen/MPhyGJhA63St4COL6zL87qSfOA9Tk+PX7Kcyo5O/5zIGZ7aX5wm7kCbymhbmtowzr8OyUeMgyFKXk3Drko5+jy+7kXxBSW2rSnlTPRrL4W7vo0hoZhTgZ+6xWZPuEb3FqUUEtsx52rJ4QaAAD+9ZsMSU6fPt1H948sefrZP520NBUGTdlneNvxuvlv7doTMLCep8kmxqekC93MkRUcq8Dzr/7v8WY0ap/aT1oO9BrSOWtKAcSctor/i9zyH2xJkR8XMquG6LDsObuBU0IrN8oDm+48ViF8Xz+23B4gcmKIJGKNOxFKdSrlRIS3VnjuRVn/aBbvjabVqXa2AKE6Gec5atV/c+6H4hFfxaEus6MjnmHTpri4FDR1lHD2OSX35Jz+J0JMvWgkXrZStIh/QUuSfn53yvAwqaUOiAHjgBIDVLFPPg0x9t7RAa9ybHdSwdPK6ZEZC8wiDO6bUEusYmW/epPRBvMm/FCaTUFdRfwY/0EB7RlVa4Noxl0ayDXXSGf4ol4C+LgzUmlu68dxd9pY72YN1nfeVLKNm0PK5wRRtR0AKI77kI03trpGj2n4WO6qAotNjQlOeqr3HpM2guuq6renxcwcRCoahkKIJHq3CMW9FSf6rotegfiJzCRX3awZfnB/vcu+9nv+xv2ETExX58H9NlnDkZmNqkxOJKPFsxj3sIWLmesUqrnGBz8ovcx1tz/9vRd3FPraPOedYB00V3P+gDCqO/9LmX3j2y7KB7zDoPLvrytdHpq7HIJH9DH1DZhszMkt72WH7s94XkXpcMIUKgEI+jXFOHClbe4DTP5wk66kIISItMdZj0IckS2fdwPzwPmJpK3ya86wDDBo/HyadfNS0Wos8ezBVVFG/sHRm1fDpsnUttl3lopmX5hVuQ72S/5sn4GlHrwK119REBBJtSSWMmlmvNyqsnuVbRIfzAcCqMwqbUXJge8EBB733TugMaP4UjQHDiK5yYDNz45xNeRIVeAsaSYUHiOYHbWml8ZeLSP9K8V+8Iy9YFWMXTAYC0wVbc/R3P+gxtITNJQR2raxQVPHcrUby7e+ADhrYOhltEwlOoDEpIMQJL2Trx+/ACftWSQnaJJXg0jHOvCXOqMsKSHFrmDUdu8GgMgFRjNWWXOnfl+ucCd2Mk5eTfLjVNqBfHMwxQEydgaartQ97cUHzGyJH1zuFbr3sAGmigaAtEm5eMibg0tIQCnJoWcCAawa2+kfQaTb+w2oD9P3b4KxE8/QluQzRNB3EJoeWENPUBA+zSmNOeKtiNKl+gG1tX8uWmeubrEZIVMotbbro076yUY99flGCFTyKRPs6Zza2eBmMhLbmTo+OZmkmJPRC0a0p0gs/muBuokkcJc1U36jfmKEpA0KbHcO3FUnnH8DAEnGzLZUk1fm3Hq8mMcO207GasWn2xmZMrvakQAAA">
+  <h1 style="font-size:40px">GRAFFITI HERO</h1>
+  <p>خودت اینجایی!</p>
+  <img src="./hero.png">
   <button class="btn" id="play">PLAY AS YOU</button>
-  <p style="font-size:13px;margin-top:12px;opacity:.6">جوی‌استیک چپ = حرکت | FIRE = شلیک رنگی</p>
 </div>
-
 <script type="module">
 import * as THREE from 'three';
-const TEX="data:image/webp;base64,UklGRmIIAABXRUJQVlA4IFYIAADwJgCdASpgAJAAPwVyq1Arp6Oisdos+XAgiWwAy2BMkXHiRFwP7O3pc/zG7+53D0if67fqN5/n2XR+Fdcb2ZezP94zHsAHWZ6sSwjvd/bEmxgPl9LRE3ALpKdvEPsqPeQ9gnXffK1qhfOT/V+NcFwPVMffb2Prf0qkHPkNdlWuQ24spiCjOAthv5tVz14J0Yjdf+O7K0JlXwwAgIsUDPcavgAmgn90Hea1jOVs6fSWrFMb14KK/jRxnnqUjps4gf8y/+sdUKBvlizXYUwxKgD/RnZen/MPhyGJhA63St4COL6zL87qSfOA9Tk+PX7Kcyo5O/5zIGZ7aX5wm7kCbymhbmtowzr8OyUeMgyFKXk3Drko5+jy+7kXxBSW2rSnlTPRrL4W7vo0hoZhTgZ+6xWZPuEb3FqUUEtsx52rJ4QaAAD+9ZsMSU6fPt1H948sefrZP520NBUGTdlneNvxuvlv7doTMLCep8kmxqekC93MkRUcq8Dzr/7v8WY0ap/aT1oO9BrSOWtKAcSctor/i9zyH2xJkR8XMquG6LDsObuBU0IrN8oDm+48ViF8Xz+23B4gcmKIJGKNOxFKdSrlRIS3VnjuRVn/aBbvjabVqXa2AKE6Gec5atV/c+6H4hFfxaEus6MjnmHTpri4FDR1lHD2OSX35Jz+J0JMvWgkXrZStIh/QUuSfn53yvAwqaUOiAHjgBIDVLFPPg0x9t7RAa9ybHdSwdPK6ZEZC8wiDO6bUEusYmW/epPRBvMm/FCaTUFdRfwY/0EB7RlVa4Noxl0ayDXXSGf4ol4C+LgzUmlu68dxd9pY72YN1nfeVLKNm0PK5wRRtR0AKI77kI03trpGj2n4WO6qAotNjQlOeqr3HpM2guuq6renxcwcRCoahkKIJHq3CMW9FSf6rotegfiJzCRX3awZfnB/vcu+9nv+xv2ETExX58H9NlnDkZmNqkxOJKPFsxj3sIWLmesUqrnGBz8ovcx1tz/9vRd3FPraPOedYB00V3P+gDCqO/9LmX3j2y7KB7zDoPLvrytdHpq7HIJH9DH1DZhszMkt72WH7s94XkXpcMIUKgEI+jXFOHClbe4DTP5wk66kIISItMdZj0IckS2fdwPzwPmJpK3ya86wDDBo/HyadfNS0Wos8ezBVVFG/sHRm1fDpsnUttl3lopmX5hVuQ72S/5sn4GlHrwK119REBBJtSSWMmlmvNyqsnuVbRIfzAcCqMwqbUXJge8EBB733TugMaP4UjQHDiK5yYDNz45xNeRIVeAsaSYUHiOYHbWml8ZeLSP9K8V+8Iy9YFWMXTAYC0wVbc/R3P+gxtITNJQR2raxQVPHcrUby7e+ADhrYOhltEwlOoDEpIMQJL2Trx+/ACftWSQnaJJXg0jHOvCXOqMsKSHFrmDUdu8GgMgFRjNWWXOnfl+ucCd2Mk5eTfLjVNqBfHMwxQEydgaartQ97cUHzGyJH1zuFbr3sAGmigaAtEm5eMibg0tIQCnJoWcCAawa2+kfQaTb+w2oD9P3b4KxE8/QluQzRNB3EJoeWENPUBA+zSmNOeKtiNKl+gG1tX8uWmeubrEZIVMotbbro076yUY99flGCFTyKRPs6Zza2eBmMhLbmTo+OZmkmJPRC0a0p0gs/muBuokkcJc1U36jfmKEpA0KbHcO3FUnnH8DAEnGzLZUk1fm3Hq8mMcO207GasWn2xmZMrvakQAAA";
 let scene,camera,renderer,player,enemies=[],bullets=[],score=0,keys={x:0,y:0},started=false;
 let loader=new THREE.TextureLoader();
+const HERO_URL="./hero.png";
 
 function init(){
-  scene=new THREE.Scene(); scene.background=new THREE.Color(0x0d0a1a);
+  scene=new THREE.Scene(); scene.background=new THREE.Color(0x1e1640);
   camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,100);
   renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setSize(innerWidth,innerHeight); document.body.appendChild(renderer.domElement);
-  scene.add(new THREE.AmbientLight(0xffffff,1.2));
-  let dl=new THREE.DirectionalLight(0xff88ff,.8); dl.position.set(5,10,5); scene.add(dl);
-  let ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:0x1e1640,emissive:0x1a0a3a,emissiveIntensity:0.3}));
-  ground.rotation.x=-1.57; scene.add(ground);
-  // ستاره ها
-  let starGeo=new THREE.BufferGeometry(); let starPos=[];
-  for(let i=0;i<600;i++){starPos.push((Math.random()-0.5)*200, 10+Math.random()*40, (Math.random()-0.5)*200);}
-  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos,3));
-  let stars=new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xffffff,size:0.2})); scene.add(stars);
+  scene.add(new THREE.AmbientLight(0xffffff,1.3));
+  let ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:0x1e1640})); ground.rotation.x=-1.57; scene.add(ground);
 
   player=new THREE.Group();
-  let tex=loader.load(TEX);
-  let mat=new THREE.SpriteMaterial({map:tex, transparent:true});
-  let spr=new THREE.Sprite(mat); spr.scale.set(2.2,3.2,1); spr.position.y=1.6;
-  player.add(spr);
-  // سایه
-  let shadow=new THREE.Mesh(new THREE.CircleGeometry(0.6,16), new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0.4}));
-  shadow.rotation.x=-1.57; player.add(shadow);
+  let tex=loader.load(HERO_URL);
+  let mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, side:2, alphaTest:0.1});
+  // حذف بک‌گراند سفید
+  mat.onBeforeCompile = s => {
+    s.fragmentShader = s.fragmentShader.replace(
+      "#include <map_fragment>",
+      "#include <map_fragment>\n if(diffuseColor.r>0.92 && diffuseColor.g>0.92 && diffuseColor.b>0.92) discard;\n"
+    );
+  };
+  let mesh=new THREE.Mesh(new THREE.PlaneGeometry(2.2,3.4), mat);
+  mesh.position.y=1.7;
+  player.add(mesh);
   player.position.set(0,0,8); scene.add(player);
-
-  camera.position.set(0,5,10); camera.lookAt(player.position);
+  camera.position.set(0,5,11); camera.lookAt(0,1,0);
   spawn(6);
 }
-function spawn(n){
-  for(let i=0;i<n;i++){
-    let c=new THREE.Color().setHSL(Math.random(),0.8,0.6);
-    let m=new THREE.Mesh(new THREE.IcosahedronGeometry(0.6,0),new THREE.MeshStandardMaterial({color:c, emissive:c, emissiveIntensity:0.4}));
-    m.position.set((Math.random()-0.5)*24,0.6,(Math.random()-0.5)*24);
-    m.userData={s:0.04+Math.random()*0.06, rot:Math.random()*0.1}; enemies.push(m); scene.add(m);
-  }
-}
+function spawn(n){for(let i=0;i<n;i++){let m=new THREE.Mesh(new THREE.IcosahedronGeometry(0.6,0),new THREE.MeshStandardMaterial({color:new THREE.Color().setHSL(Math.random(),0.8,0.6), emissive:new THREE.Color().setHSL(Math.random(),0.8,0.5), emissiveIntensity:0.4})); m.position.set((Math.random()-0.5)*24,0.6,(Math.random()-0.5)*24); m.userData={s:0.05+Math.random()*0.05}; enemies.push(m); scene.add(m);}}
 function shoot(){
-  let colors=[0xff3bfb,0x00e5ff,0x44ff88,0xffee00];
-  let col=colors[Math.floor(Math.random()*colors.length)];
-  let b=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,10),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:2}));
-  b.position.copy(player.position); b.position.y=1.2;
-  // جهت شلیک به سمت بالا صفحه
+  let b=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,10),new THREE.MeshStandardMaterial({color:0xff00ff,emissive:0xff00ff,emissiveIntensity:3}));
+  b.position.copy(player.position); b.position.y=1.2; b.position.z-=0.5;
   b.userData={v:new THREE.Vector3(0,0,-0.7)}; bullets.push(b); scene.add(b);
 }
 function update(){
@@ -85,28 +70,22 @@ function update(){
   player.position.x=Math.max(-12,Math.min(12,player.position.x));
   player.position.z=Math.max(-12,Math.min(12,player.position.z));
   camera.position.x+=(player.position.x-camera.position.x)*0.06;
-  camera.position.z+=(player.position.z+9-camera.position.z)*0.06;
-  camera.lookAt(player.position.x,1,player.position.z);
-
+  camera.position.z+=(player.position.z+11-camera.position.z)*0.06;
+  camera.lookAt(player.position.x,1.5,player.position.z);
   for(let i=bullets.length-1;i>=0;i--){
-    let b=bullets[i]; b.position.add(b.userData.v); b.rotation.y+=0.2;
-    if(b.position.length()>45){scene.remove(b); bullets.splice(i,1); continue;}
+    let b=bullets[i]; b.position.add(b.userData.v);
+    if(b.position.length()>50){scene.remove(b); bullets.splice(i,1); continue;}
     for(let j=enemies.length-1;j>=0;j--){
       let e=enemies[j];
       if(b.position.distanceTo(e.position)<1.2){
-        // انفجار
-        let exp=new THREE.Mesh(new THREE.SphereGeometry(0.8,8,8),new THREE.MeshBasicMaterial({color:b.material.color,transparent:true,opacity:0.8}));
-        exp.position.copy(e.position); scene.add(exp);
-        let scale=1; let iv=setInterval(()=>{scale+=0.2; exp.scale.set(scale,scale,scale); exp.material.opacity-=0.1; if(exp.material.opacity<=0){scene.remove(exp); clearInterval(iv);}},30);
-        scene.remove(b); bullets.splice(i,1); scene.remove(e); enemies.splice(j,1);
-        score++; sc.textContent=score; if(enemies.length<3) spawn(5); break;
+        scene.remove(b); bullets.splice(i,1); scene.remove(e); enemies.splice(j,1); score++; sc.textContent=score;
+        if(enemies.length<3) spawn(5); break;
       }
     }
   }
-  enemies.forEach(e=>{let d=new THREE.Vector3().subVectors(player.position,e.position).normalize().multiplyScalar(e.userData.s); e.position.add(d); e.rotation.y+=e.userData.rot; e.rotation.x+=0.02;});
+  enemies.forEach(e=>{let d=new THREE.Vector3().subVectors(player.position,e.position).normalize().multiplyScalar(e.userData.s); e.position.add(d); e.rotation.y+=0.02;});
 }
 function loop(){requestAnimationFrame(loop); update(); if(renderer) renderer.render(scene,camera);}
-
 const joy=document.getElementById('joy'),stk=document.getElementById('stk'); let act=false;
 function hj(e){let r=joy.getBoundingClientRect(); let t=e.touches?e.touches[0]:e; let x=t.clientX-r.left-r.width/2, y=t.clientY-r.top-r.height/2; let d=Math.sqrt(x*x+y*y),m=40; if(d>m){x=x/d*m; y=y/d*m;} stk.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`; keys.x=x/m; keys.y=y/m;}
 joy.addEventListener('touchstart',e=>{act=true; hj(e);},{passive:false}); joy.addEventListener('touchmove',e=>{if(act) hj(e);},{passive:false}); joy.addEventListener('touchend',()=>{act=false; stk.style.transform='translate(-50%,-50%)'; keys.x=0; keys.y=0;});
