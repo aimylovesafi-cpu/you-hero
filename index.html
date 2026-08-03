@@ -3,155 +3,159 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>MOSQUITO HERO AR</title>
+<title>MOSQUITO HERO AR - FIX</title>
 <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
 body{background:#000;overflow:hidden;color:#fff;font-family:-apple-system,sans-serif}
-#video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transform:scaleX(-1)}
-#ui{position:fixed;top:0;left:0;width:100%;padding:14px;display:flex;justify-content:space-between;z-index:20;font-weight:900;text-shadow:0 0 10px #000;background:rgba(0,0,0,.3)}
-#joy{position:fixed;left:16px;bottom:20px;width:115px;height:115px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);border-radius:50%;z-index:20;backdrop-filter:blur(5px)}
+#ui{position:fixed;top:0;left:0;width:100%;padding:14px;display:flex;justify-content:space-between;z-index:20;font-weight:900;background:rgba(0,0,0,.5)}
+#joy{position:fixed;left:16px;bottom:20px;width:115px;height:115px;background:rgba(255,255,255,.25);border:2px solid #fff;border-radius:50%;z-index:20}
 #stk{position:absolute;left:50%;top:50%;width:44px;height:44px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
-#fire{position:fixed;right:16px;bottom:20px;width:95px;height:95px;background:linear-gradient(135deg,#,#);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 30px #;font-size:20px}
-#start{position:fixed;inset:0;background:radial-gradient(circle at center,#,#000);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.btn{background:linear-gradient(90deg,#,#);padding:18px 42px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:19px;margin-top:12px}
+#fire{position:fixed;right:16px;bottom:20px;width:95px;height:95px;background:linear-gradient(135deg,#ff3b3b,#ffcc00);border-radius:50%;z-index:20;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:28px;box-shadow:0 0 20px #ff0000}
+#start{position:fixed;inset:0;background:#000;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.btn{background:linear-gradient(90deg,#ff3bfb,#00ffff);padding:18px 42px;border-radius:30px;border:none;font-weight:900;color:#000;font-size:19px;margin-top:12px}
+#log{position:fixed;bottom:120px;left:0;width:100%;text-align:center;z-index:30;font-size:12px;opacity:.7}
 </style>
 </head>
 <body>
-<video id="video" autoplay playsinline muted></video>
-<div id="ui"><div>SCORE <span id="sc">0</span></div><div>MOSQUITO HERO AR</div></div>
+<div id="ui"><div>SCORE <span id="sc">0</span></div><div>🦟 MOSQUITO HERO</div></div>
 <div id="joy"><div id="stk"></div></div>
 <div id="fire">💥</div>
 <div id="start">
- <h1 style="font-size:38px">🦟 MOSQUITO HERO</h1>
- <p style="margin:12px 0;opacity:.9">دوربین روشن میشه، پشه‌ها بهت حمله میکنن!<br>باید بزنیشون!</p>
- <img src="./hero.png" style="width:120px;border-radius:16px;margin:10px">
- <button class="btn" id="play">START AR + CAMERA</button>
- <p style="font-size:12px;margin-top:10px;opacity:.6">اجازه دوربین رو بده</p>
+  <h1>MOSQUITO HERO</h1>
+  <p style="margin:10px 0">نسخه AR - دوربین واقعی</p>
+  <img src="./hero.png" style="width:120px;border-radius:12px">
+  <button class="btn" id="play">START AR CAMERA</button>
+  <p id="err" style="color:#ff5b5b;margin-top:10px;font-size:12px"></p>
 </div>
+<div id="log"></div>
+
 <script type="module">
 import * as THREE from 'three';
 let scene,camera,renderer,player,enemies=[],bullets=[],score=0,keys={x:0,y:0},started=false;
-let loader=new THREE.TextureLoader();
+let video, videoTex;
 const HERO_URL="./hero.png";
-const video=document.getElementById('video');
+const log = t => document.getElementById('log').textContent = t;
 
 async function startCamera(){
- try{
- let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}, audio:false});
- video.srcObject=stream;
- await video.play();
- }catch(e){
- alert("دوربین باز نشد، با بک‌گراند معمولی بازی میکنیم: "+e.message);
- }
+  log("در حال روشن کردن دوربین...");
+  // اول دوربین عقب، اگه نشد جلو
+  let constraints = [
+    {video:{facingMode:{exact:"environment"}}, audio:false},
+    {video:{facingMode:"environment"}, audio:false},
+    {video:true, audio:false}
+  ];
+  for(let c of constraints){
+    try{
+      let stream = await navigator.mediaDevices.getUserMedia(c);
+      video = document.createElement('video');
+      video.autoplay=true; video.playsInline=true; video.muted=true;
+      video.srcObject=stream;
+      await video.play();
+      log("دوربین روشن شد ✅");
+      return video;
+    }catch(e){ console.log("fail",e); }
+  }
+  throw new Error("دوربین پیدا نشد");
 }
 
-function init(){
- scene=new THREE.Scene();
-‎ // بک‌گراند شفاف که دوربین معلوم باشه
- scene.background=null;
- camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,100);
- renderer=new THREE.WebGLRenderer({antialias:true, alpha:true});
- renderer.setClearColor(0x000000,0);
- renderer.setSize(innerWidth,innerHeight);
- document.body.appendChild(renderer.domElement);
+function init(vid){
+  scene=new THREE.Scene();
+  videoTex = new THREE.VideoTexture(vid);
+  videoTex.colorSpace = THREE.SRGBColorSpace;
+  scene.background = videoTex; // بک‌گراند = دوربین
 
- scene.add(new THREE.AmbientLight(0xffffff,1.4));
- let dl=new THREE.DirectionalLight(0xffffff,1); dl.position.set(5,10,5); scene.add(dl);
+  camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,100);
+  renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(innerWidth,innerHeight);
+  document.body.appendChild(renderer.domElement);
 
- player=new THREE.Group();
- let tex=loader.load(HERO_URL);
- let mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, side:2, alphaTest:0.1});
- 
- 
- mat.onBeforeCompile = s => {
-  s.fragmentShader = s.fragmentShader.replace("#include <map_fragment>",
-  `#include <map_fragment>
-   float gray = dot(diffuseColor.rgb, vec3(0.333));
-   if(gray > 0.85 && diffuseColor.a > 0.5) {
-     float checker = mod(floor(vMapUv.x*20.0) + floor(vMapUv.y*20.0), 2.0);
-     if(checker < 0.5) discard;
-   }
-   if(diffuseColor.r>0.9 && diffuseColor.g>0.9 && diffuseColor.b>0.9) discard;
-  `);
-};
- 
- 
- let mesh=new THREE.Mesh(new THREE.PlaneGeometry(2.2,3.4), mat);
- mesh.position.y=1.2; player.add(mesh);
- player.position.set(0,0,5); scene.add(player);
+  scene.add(new THREE.AmbientLight(0xffffff,1.6));
+  let dl=new THREE.DirectionalLight(0xffffff,1.2); dl.position.set(5,10,5); scene.add(dl);
 
- camera.position.set(0,2,7); camera.lookAt(player.position);
- spawn(7);
+  player=new THREE.Group();
+  let loader=new THREE.TextureLoader();
+  let tex=loader.load(HERO_URL);
+  let mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, side:2, alphaTest:0.2});
+  let mesh=new THREE.Mesh(new THREE.PlaneGeometry(2,3.2), mat);
+  mesh.position.y=1.2; player.add(mesh);
+  player.position.set(0,0,4); scene.add(player);
+
+  spawn(8);
 }
 
 function createFly(){
- let g=new THREE.Group();
- let body=new THREE.Mesh(new THREE.SphereGeometry(0.25,8,8), new THREE.MeshStandardMaterial({color:0x111111}));
- g.add(body);
- let wing1=new THREE.Mesh(new THREE.PlaneGeometry(0.4,0.2), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.6, side:2}));
- wing1.position.set(0.2,0.1,0); wing1.rotation.z=0.3; g.add(wing1);
- let wing2=wing1.clone(); wing2.position.x=-0.2; wing2.rotation.z=-0.3; g.add(wing2);
-‎ // چشم قرمز
- let eye=new THREE.Mesh(new THREE.SphereGeometry(0.12,6,6), new THREE.MeshStandardMaterial({color:0xff0000, emissive:0xff0000, emissiveIntensity:0.8}));
- eye.position.set(0,0.1,0.2); g.add(eye);
- return g;
+  let g=new THREE.Group();
+  let body=new THREE.Mesh(new THREE.CapsuleGeometry(0.12,0.4,4,8), new THREE.MeshStandardMaterial({color:0x222222}));
+  body.rotation.z=1.57; g.add(body);
+  let wing=new THREE.Mesh(new THREE.CircleGeometry(0.25,8), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.5, side:2}));
+  wing.position.set(0.15,0.1,0); wing.rotation.x=1; g.add(wing);
+  let wing2=wing.clone(); wing2.position.x=-0.15; g.add(wing2);
+  let eye=new THREE.Mesh(new THREE.SphereGeometry(0.08,6,6), new THREE.MeshStandardMaterial({color:0xff0000, emissive:0xff0000}));
+  eye.position.set(0,0.1,0.25); g.add(eye);
+  return g;
 }
-
 function spawn(n){
- for(let i=0;i<n;i++){
- let m=createFly();
- m.position.set((Math.random()-0.5)*12, Math.random()*4+0.5, (Math.random()-0.5)*12 - 5);
- m.userData={s:0.03+Math.random()*0.06, buzz:Math.random()*10};
- enemies.push(m); scene.add(m);
- }
+  for(let i=0;i<n;i++){
+    let m=createFly();
+    m.position.set((Math.random()-0.5)*10, Math.random()*3+0.5, (Math.random()-0.5)*8 - 2);
+    m.userData={s:0.04+Math.random()*0.05, buzz:Math.random()*10};
+    enemies.push(m); scene.add(m);
+  }
 }
 function shoot(){
- let b=new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8), new THREE.MeshStandardMaterial({color:0xffff00, emissive:0xffff00, emissiveIntensity:3}));
- b.position.copy(player.position); b.position.y=1.2; b.position.z-=0.3;
- let dir=new THREE.Vector3(0,0,-1); dir.applyQuaternion(camera.quaternion);
- b.userData={v:dir.multiplyScalar(0.8)}; bullets.push(b); scene.add(b);
+  let b=new THREE.Mesh(new THREE.SphereGeometry(0.12,6,6), new THREE.MeshStandardMaterial({color:0xffff00, emissive:0xffff00, emissiveIntensity:4}));
+  b.position.copy(player.position); b.position.y=1.2;
+  let dir=new THREE.Vector3(0,0,-1); dir.applyQuaternion(camera.quaternion);
+  b.userData={v:dir.multiplyScalar(0.9)}; bullets.push(b); scene.add(b);
 }
 function update(){
- if(!started) return;
- player.position.x+=keys.x*0.18; player.position.z+=keys.y*0.18;
- camera.position.x+=(player.position.x-camera.position.x)*0.05;
- camera.lookAt(player.position.x,1,player.position.z-1);
+  if(!started) return;
+  player.position.x+=keys.x*0.18; player.position.z+=keys.y*0.18;
+  camera.position.x+=(player.position.x-camera.position.x)*0.05;
+  camera.lookAt(player.position.x,1,player.position.z-2);
 
- for(let i=bullets.length-1;i>=0;i--){
- let b=bullets[i]; b.position.add(b.userData.v);
- if(b.position.length()>30){scene.remove(b); bullets.splice(i,1); continue;}
- for(let j=enemies.length-1;j>=0;j--){
- let e=enemies[j];
- if(b.position.distanceTo(e.position)<0.9){
-‎ // خون پاشی
- let blood=new THREE.Mesh(new THREE.SphereGeometry(0.5,6,6), new THREE.MeshBasicMaterial({color:0xff0000, transparent:true, opacity:0.8}));
- blood.position.copy(e.position); scene.add(blood);
- setTimeout(()=>scene.remove(blood),200);
- scene.remove(b); bullets.splice(i,1); scene.remove(e); enemies.splice(j,1);
- score++; sc.textContent=score;
- if(enemies.length<4) spawn(4); break;
- }
- }
- }
- enemies.forEach(e=>{
- let d=new THREE.Vector3().subVectors(player.position,e.position).normalize().multiplyScalar(e.userData.s);
- e.position.add(d);
- e.userData.buzz+=0.5;
- e.rotation.y=Math.sin(e.userData.buzz)*0.8;
- e.children[1].rotation.z=Math.sin(e.userData.buzz*2)*0.8+0.3;
- e.children[2].rotation.z=-Math.sin(e.userData.buzz*2)*0.8-0.3;
- });
+  for(let i=bullets.length-1;i>=0;i--){
+    let b=bullets[i]; b.position.add(b.userData.v);
+    if(b.position.length()>25){scene.remove(b); bullets.splice(i,1); continue;}
+    for(let j=enemies.length-1;j>=0;j--){
+      let e=enemies[j];
+      if(b.position.distanceTo(e.position)<0.8){
+        let blood=new THREE.Mesh(new THREE.SphereGeometry(0.3,6,6), new THREE.MeshBasicMaterial({color:0xff0000}));
+        blood.position.copy(e.position); scene.add(blood); setTimeout(()=>scene.remove(blood),150);
+        scene.remove(b); bullets.splice(i,1); scene.remove(e); enemies.splice(j,1);
+        score++; sc.textContent=score;
+        if(enemies.length<5) spawn(4); break;
+      }
+    }
+  }
+  enemies.forEach(e=>{
+    let d=new THREE.Vector3().subVectors(player.position,e.position).normalize().multiplyScalar(e.userData.s);
+    e.position.add(d);
+    e.userData.buzz+=0.6;
+    e.rotation.y+=Math.sin(e.userData.buzz*0.1)*0.05;
+  });
 }
 function loop(){requestAnimationFrame(loop); update(); if(renderer) renderer.render(scene,camera);}
 
 const joy=document.getElementById('joy'),stk=document.getElementById('stk'); let act=false;
 function hj(e){let r=joy.getBoundingClientRect(); let t=e.touches?e.touches[0]:e; let x=t.clientX-r.left-r.width/2, y=t.clientY-r.top-r.height/2; let d=Math.sqrt(x*x+y*y),m=40; if(d>m){x=x/d*m; y=y/d*m;} stk.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`; keys.x=x/m; keys.y=y/m;}
-joy.addEventListener('touchstart',e=>{act=true; hj(e);},{passive:false}); joy.addEventListener('touchmove',e=>{if(act) hj(e);},{passive:false}); joy.addEventListener('touchend',()=>{act=false; stk.style.transform='translate(-50%,-50%)'; keys.x=0; keys.y=0;});
-fire.addEventListener('touchstart',e=>{e.preventDefault(); shoot();},{passive:false}); fire.addEventListener('click',shoot);
-async function start(){await startCamera(); document.getElementById('start').style.display='none'; started=true; init(); loop();}
-play.addEventListener('click',start); play.addEventListener('touchstart',e=>{e.preventDefault(); start();},{passive:false});
+joy.addEventListener('touchstart',e=>{act=true; hj(e);},{passive:false});
+joy.addEventListener('touchmove',e=>{if(act) hj(e);},{passive:false});
+joy.addEventListener('touchend',()=>{act=false; stk.style.transform='translate(-50%,-50%)'; keys.x=0; keys.y=0;});
+fire.addEventListener('touchstart',e=>{e.preventDefault(); shoot();},{passive:false});
+
+document.getElementById('play').addEventListener('click', async ()=>{
+  try{
+    let v = await startCamera();
+    document.getElementById('start').style.display='none';
+    started=true; init(v); loop();
+  }catch(err){
+    document.getElementById('err').textContent = "خطا: " + err.message + " - مطمئن شو سایت https هست و اجازه دوربین دادی";
+    log(err.message);
+  }
+});
 </script>
 </body>
 </html>
